@@ -25,29 +25,33 @@ def address_response(address: str,output_format: str = "json"):
 
     # --Fetching-latitude-and-longitude-data-from-google-maps-api
     google_url_for_fetching_raw_location_data = f"{base_url}?address={address}&key={api_key}"
+    try :
+        
+        raw_data = requests.post(google_url_for_fetching_raw_location_data)
+        results = raw_data.json()['results'][0]
+        lat = results['geometry']['location']['lat']
+        lng = results['geometry']['location']['lng']
 
-    raw_data = requests.post(google_url_for_fetching_raw_location_data)
-    results = raw_data.json()['results'][0]
-    lat = results['geometry']['location']['lat']
-    lng = results['geometry']['location']['lng']
+        response = {
 
-    response = {
+            "coordinates": {
+                "lat": lat,
+                "lng": lng
+            },
+            "address": address
+        }
 
-        "coordinates": {
-            "lat": lat,
-            "lng": lng
-        },
-        "address": address
-    }
+        if output_format == "json":
 
-    if output_format == "json":
+            return response
 
-        return response
+        else:
 
-    else:
-
-        xml_response = toxml(response)
-        return xml_response
+            xml_response = toxml(response)
+            return xml_response
+    
+    except :
+        return 'Error'
 
 # ------------main-function
 if __name__ == "__main__":
