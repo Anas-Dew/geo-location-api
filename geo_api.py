@@ -26,7 +26,7 @@ def address_response(address: str,output_format: str = "json"):
     # --Fetching-latitude-and-longitude-data-from-google-maps-api
     google_url_for_fetching_raw_location_data = f"{base_url}?address={address}&key={api_key}"
     try :
-        
+
         raw_data = requests.post(google_url_for_fetching_raw_location_data)
         results = raw_data.json()['results'][0]
         lat = results['geometry']['location']['lat']
@@ -39,6 +39,7 @@ def address_response(address: str,output_format: str = "json"):
                 "lng": lng
             },
             "address": address
+            
         }
 
         if output_format == "json":
